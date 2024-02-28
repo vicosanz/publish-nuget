@@ -79,8 +79,9 @@ class Action {
         console.log(pushOutput)
         console.log("End Output")
 
-        if (/error/.test(pushOutput))
-            this._printErrorAndExit(`${/error.*/.exec(pushOutput)[0]}`)
+        if (!(/error: Path.GetDirectoryName\(searchPath\)/.test(pushOutput)))
+            if (/error/.test(pushOutput))
+                this._printErrorAndExit(`${/error.*/.exec(pushOutput)[0]}`)
 
         process.stdout.write(`::set-output name=PACKAGE_NAME::${packageFilename}` + os.EOL)
         process.stdout.write(`::set-output name=PACKAGE_PATH::${path.resolve(packageFilename)}` + os.EOL)
