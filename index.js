@@ -70,7 +70,9 @@ class Action {
         const packageFilename = packages.filter(p => p.endsWith(".nupkg"))[0],
             symbolsFilename = packages.filter(p => p.endsWith(".snupkg"))[0]
 
-        const pushCmd = `dotnet nuget push "${packageFilename}" --source ${this.nugetSource}/v3/index.json --api-key ${this.nugetKey} --skip-duplicate ${!this.includeSymbols ? "--no-symbols" : ""}`,
+        this._executeInProcess(`dotnet nuget --version`)
+
+        const pushCmd = `dotnet nuget push ${packageFilename} --source ${this.nugetSource}/v3/index.json --api-key ${this.nugetKey} --skip-duplicate ${!this.includeSymbols ? "--no-symbols" : ""}`,
             pushOutput = this._executeCommand(pushCmd, { encoding: "utf-8" }).stdout
 
         console.log("Output:")
