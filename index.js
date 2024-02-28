@@ -73,7 +73,9 @@ class Action {
         const pushCmd = `dotnet nuget push ${packageFilename} --source ${this.nugetSource}/v3/index.json --api-key ${this.nugetKey} --skip-duplicate ${!this.includeSymbols ? "--no-symbols" : ""}`,
             pushOutput = this._executeCommand(pushCmd, { encoding: "utf-8" }).stdout
 
+        console.log("Output:")
         console.log(pushOutput)
+        console.log("End Output")
 
         if (/error/.test(pushOutput))
             this._printErrorAndExit(`${/error.*/.exec(pushOutput)[0]}`)
