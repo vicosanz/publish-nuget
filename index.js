@@ -67,16 +67,16 @@ class Action {
         const packages = fs.readdirSync(".").filter(fn => fn.endsWith("nupkg"))
         console.log(`Generated Package(s): ${packages.join(", ")}`)
 
-        const pushCmd = `dotnet nuget push "*.nupkg" --source ${this.nugetSource}/v3/index.json --api-key ${this.nugetKey} --skip-duplicate ${!this.includeSymbols ? "--no-symbols" : ""}`,
+        const packageFilename = packages.filter(p => p.endsWith(".nupkg"))[0],
+            symbolsFilename = packages.filter(p => p.endsWith(".snupkg"))[0]
+
+        const pushCmd = `dotnet nuget push ${packageFilename} --source ${this.nugetSource}/v3/index.json --api-key ${this.nugetKey} --skip-duplicate ${!this.includeSymbols ? "--no-symbols" : ""}`,
             pushOutput = this._executeCommand(pushCmd, { encoding: "utf-8" }).stdout
 
         console.log(pushOutput)
 
         if (/error/.test(pushOutput))
             this._printErrorAndExit(`${/error.*/.exec(pushOutput)[0]}`)
-
-        const packageFilename = packages.filter(p => p.endsWith(".nupkg"))[0],
-            symbolsFilename = packages.filter(p => p.endsWith(".snupkg"))[0]
 
         process.stdout.write(`::set-output name=PACKAGE_NAME::${packageFilename}` + os.EOL)
         process.stdout.write(`::set-output name=PACKAGE_PATH::${path.resolve(packageFilename)}` + os.EOL)
