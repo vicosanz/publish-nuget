@@ -100,7 +100,8 @@ class Action {
         }
 
         console.log(`Package Name: ${this.packageName}`)
-
+        console.log(`${this.nugetSource}/v3-flatcontainer/${this.packageName}/index.json`)
+        
         https.get(`${this.nugetSource}/v3-flatcontainer/${this.packageName}/index.json`, res => {
             let body = ""
 
@@ -117,7 +118,7 @@ class Action {
                 })
             }
         }).on("error", e => {
-            this._printErrorAndExit(`error: ${e.message}`)
+            this._printErrorAndExit(`error: ***${e.message}`)
         })
     }
 
